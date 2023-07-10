@@ -1,0 +1,307 @@
+﻿@page "/cors"
+@using WebSecurityMechanisms.Models
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@inject IJSRuntime Js
+@inject HttpClient Http
+@inject ISnackbar SnackbarService
+
+<PageTitle>CORS</PageTitle>
+
+<h1>CORS</h1>
+
+<h2>Sandbox</h2>
+
+<MudGrid>
+    <MudItem xs="2">
+        <MudPaper Width="100%">
+            <MudSelect Dense="true" Variant="Variant.Outlined" T="Endpoint" ToStringFunc="@_endpointConverter" Label="Endpoint" @bind-Value="@_selectedEndpoint" AnchorOrigin="Origin.BottomCenter" SelectedValuesChanged="OnEndpointChangedAsync">
+                @if (_endpoints != null)
+                {
+                    @foreach (var endpoint in _endpoints)
+                    {
+                        <MudSelectItem Value="@endpoint"/>
+                    }
+                }
+            </MudSelect>
+
+            <MudSelect Dense="true" Variant="Variant.Outlined" T="Preset" ToStringFunc="@_presetConverter" Label="Preset" @bind-Value="@_selectedPreset" AnchorOrigin="Origin.BottomCenter" SelectedValuesChanged="OnPresetChangedAsync">
+                @if (_presets != null)
+                {
+                    @foreach (var preset in _presets)
+                    {
+                        <MudSelectItem Value="@preset"/>
+                    }
+                }
+            </MudSelect>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="5">
+        <div id="editor" class="editor"></div>
+    </MudItem>
+    <MudItem xs="5">
+        <MudSimpleTable Style="overflow-x: auto;" Dense="true">
+            <tbody>
+            <tr>
+                <td>
+                    <strong>Browser origin</strong>
+                </td>
+                <td>@Configuration["HeadlessFrontUrl"]</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>API CORS URL</strong>
+                </td>
+                <td>@Configuration["CorsApiUrl"]</td>
+            </tr>
+            <tr>
+                <td class="title" colspan="2">
+                    <strong>@Configuration["CorsApiUrl"]/allorigins</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>Allowed origins</td>
+                <td>*</td>
+            </tr>
+            <tr>
+                <td>Allowed verbs</td>
+                <td>GET, POST, PUT, DELETE</td>
+            </tr>
+            <tr>
+                <td>Allowed headers</td>
+                <td>X-Custom-Header</td>
+            </tr>
+            <tr>
+                <td class="title" colspan="2">
+                    <strong>@Configuration["CorsApiUrl"]/restricted</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>Allowed origins</td>
+                <td>@Configuration["HeadlessFrontUrl"]</td>
+            </tr>
+            <tr>
+                <td>Allowed verbs</td>
+                <td>GET, POST, PUT, DELETE</td>
+            </tr>
+            <tr>
+                <td>Allowed headers</td>
+                <td>X-Custom-Header</td>
+            </tr>
+            <tr>
+                <td class="title" colspan="2">
+                    <strong>@Configuration["CorsApiUrl"]/closed</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>Allowed origins</td>
+                <td>None</td>
+            </tr>
+            <tr>
+                <td>Allowed verbs</td>
+                <td>None</td>
+            </tr>
+            <tr>
+                <td>Allowed headers</td>
+                <td>None</td>
+            </tr>
+            </tbody>
+        </MudSimpleTable>
+    </MudItem>
+</MudGrid>
+
+<MudButton Variant="Variant.Filled" Class="mt-2" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Send" FullWidth="true" @onclick="TestConfigurationAsync">Execute</MudButton>
+
+<h2>Results</h2>
+
+<MudTabs KeepPanelsAlive="true" Elevation="2" Rounded="true" Outlined="true" Class="mt-2" ApplyEffectsToContainer="true" PanelClass="pa-6">
+    <MudTabPanel Text="Network">
+        <MudText>
+            @if (_testResult is {IsWithPreflight: true })
+            {
+                var request = _testResult.HttpExchanges.First().Request;
+
+                <h3>Preflight request</h3>
+
+                <MudGrid>
+                    <MudItem xs="12" sm="6">
+                        <h4>Request headers</h4>
+                        <span>
+                            <MudChip Color="Color.Primary">@request.Method</MudChip> @request.Url
+                        </span>
+                        <MudSimpleTable Style="overflow-x: auto;" Dense="true">
+                            <thead>
+                            <tr>
+                                <th>Header</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var header in request.Headers.OrderBy(h => h.Key))
+                            {
+                                <tr class="@(header.IsHighlighted ? "highlighted" : "")">
+                                    <td>@header.Key</td>
+                                    <td>@header.Value</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </MudSimpleTable>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        @{
+                            var response = _testResult.HttpExchanges.First().Response;
+                        }
+                        <h4>Response headers</h4>
+                        @if (response.IsInError)
+                        {
+                            <MudChip Color="Color.Error">@((int)@response.Status) - @response.Status</MudChip>
+                        }
+                        else
+                        {
+                            <MudChip Color="Color.Success">@((int)@response.Status) - @response.Status</MudChip>
+                        }
+                        <MudSimpleTable Style="overflow-x: auto;" Dense="true">
+                            <thead>
+                            <tr>
+                                <th>Header</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var header in response.Headers.OrderBy(h => h.Key))
+                            {
+                                <tr class="@(header.IsHighlighted ? "highlighted" : "")">
+                                    <td>@header.Key</td>
+                                    <td>@header.Value</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </MudSimpleTable>
+                    </MudItem>
+                </MudGrid>
+            }
+
+            <h3>Request</h3>
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <h4>Request headers</h4>
+                    @if (_testResult == null || _testResult.HttpExchanges.Count == 0 || (_testResult.IsWithPreflight && _testResult.HttpExchanges.Count == 1))
+                    {
+                        <span>No data</span>
+                    }
+                    else
+                    {
+                        var index = _testResult.HttpExchanges.Count == 1 ? 0 : 1;
+
+                        var request = _testResult.HttpExchanges[index].Request;
+
+                        <span>
+                            <MudChip Color="Color.Primary">@request.Method</MudChip> @request.Url
+                        </span>
+
+                        <MudSimpleTable Style="overflow-x: auto;" Dense="true">
+                            <thead>
+                            <tr>
+                                <th>Header</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach (var header in request.Headers.OrderBy(h => h.Key))
+                            {
+                                <tr class="@(header.IsHighlighted ? "highlighted" : "")">
+                                    <td>@header.Key</td>
+                                    <td>@header.Value</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </MudSimpleTable>
+                    }
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <h4>Response headers</h4>
+                    @if (_testResult == null || _testResult.HttpExchanges.Count == 0 || (_testResult.IsWithPreflight && _testResult.HttpExchanges.Count == 1))
+                    {
+                        <span>No data</span>
+                    }
+                    else
+                    {
+                        var index = _testResult.HttpExchanges.Count == 1 ? 0 : 1;
+
+                        var response = _testResult.HttpExchanges[index].Response;
+
+                        @if (response.IsInError)
+                        {
+                            <MudChip Color="Color.Error">@((int)@response.Status) - @response.Status</MudChip>
+                        }
+                        else
+                        {
+                            <MudChip Color="Color.Success">@((int)@response.Status) - @response.Status</MudChip>
+                        }
+
+                        <MudSimpleTable Style="overflow-x: auto;" Dense="true">
+                            <thead>
+                            <tr>
+                                <th>Header</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var header in response.Headers.OrderBy(h => h.Key))
+                            {
+                                <tr class="@(header.IsHighlighted ? "highlighted" : "")">
+                                    <td>@header.Key</td>
+                                    <td>@header.Value</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </MudSimpleTable>
+
+                        <h4>Response body</h4>
+
+                        @response.Body
+                    }
+                </MudItem>
+            </MudGrid>
+        </MudText>
+    </MudTabPanel>
+    <MudTabPanel Text="Console">
+        <MudText>
+            <MudSimpleTable Style="overflow-x: auto;" Dense="true">
+                <thead>
+                <tr>
+                    <th>Message</th>
+                    <th>Type</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (_testResult == null || _testResult.ConsoleMessages == null || _testResult.ConsoleMessages.Count == 0)
+                {
+                    <tr>
+                        <td colspan="2" style="text-align: center;">No data</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var consoleMessage in _testResult.ConsoleMessages)
+                    {
+                        <tr class="@(consoleMessage.Type == "Error" ? "error" : "success")">
+                            <td>
+                                @consoleMessage.Text
+                            </td>
+                            <td>@consoleMessage.Type</td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </MudSimpleTable>
+        </MudText>
+    </MudTabPanel>
+</MudTabs>
+
+<h2>Diagram</h2>
+
+<div id="http-exchanges-sequence-diagram" @ref="_renderTo"><div style="text-align: left;">No data</div></div>
+
+<Loader IsLoaderVisible="@IsLoaderVisible"></Loader>

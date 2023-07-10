@@ -1,0 +1,7 @@
+const req = new XMLHttpRequest();
+req.addEventListener("load", function () {
+console.log('OK');
+});
+req.open("PUT", "<APIURL>");
+req.setRequestHeader("X-Custom-Header", 1);
+req.send();

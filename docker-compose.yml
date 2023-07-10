@@ -1,0 +1,81 @@
+services:
+  api:
+    container_name: wsm.api
+    build:
+      context: .
+      dockerfile: WebSecurityMechanisms.Api/Dockerfile
+      target: final
+    command: dotnet run
+    environment:
+      - HeadlessFrontUrl=http://front.dev
+      - CorsApiUrl=http://cors-api.dev
+    ports:
+      - 8080:80
+    volumes:
+      - ./WebSecurityMechanisms.Data/WebSecurityMechanisms.Data.sqlite:/data/WebSecurityMechanisms.Data.sqlite
+    networks: 
+      - wsm_network
+  app:
+    container_name: wsm.app
+    build:
+      context: .
+      dockerfile: WebSecurityMechanisms.App/Dockerfile
+      target: final
+    environment:
+      - ApiUrl=http://localhost:8080
+      - CorsFrontUrl=http://front.dev
+      - CorsApiUrl=http://cors-api.dev
+    ports:
+      - 80:80
+    networks:
+      - wsm_network
+  headless-front:
+    container_name: wsm.headlessfrontend
+    build:
+      context: .
+      dockerfile: WebSecurityMechanisms.HeadlessFrontend/Dockerfile
+      target: final
+    command: dotnet run
+    hostname: front.dev
+    networks:
+      - wsm_network
+  headless-chromium:
+    container_name: wsm.chromium
+    build:
+      context: .
+      dockerfile: WebSecurityMechanisms.Chromium/Dockerfile
+    hostname: chromium.dev
+    ports:
+      - 9222:9222
+    networks:
+      wsm_network:
+        ipv4_address: 192.168.99.2
+  proxy:
+    container_name: wsm.proxy
+    build:
+      context: .
+      dockerfile: WebSecurityMechanisms.Proxy/Dockerfile
+      target: final
+    hostname: proxy.dev
+    volumes:
+      - ./WebSecurityMechanisms.Data/WebSecurityMechanisms.Data.sqlite:/data/WebSecurityMechanisms.Data.sqlite
+    networks:
+      - wsm_network
+  cors.api:
+    container_name: wsm.cors.api
+    build:
+      context: .
+      dockerfile: Components/CORS/CORS.Backend/Dockerfile
+      target: final
+    command: dotnet run
+    hostname: cors-api.dev
+    networks:
+      - wsm_network
+networks:
+  wsm_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.99.0/24
+          gateway: 192.168.99.1

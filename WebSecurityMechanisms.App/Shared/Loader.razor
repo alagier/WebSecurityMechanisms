@@ -1,0 +1,9 @@
+<MudOverlay @bind-Visible="IsLoaderVisible" DarkBackground="true" ZIndex="9999">
+    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true"/>
+</MudOverlay>
+
+@code
+{
+    [Parameter]
+    public bool IsLoaderVisible { get; set; } = false;
+}

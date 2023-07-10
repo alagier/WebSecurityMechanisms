@@ -1,0 +1,66 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="@CustomTheme" />
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        @* <MudSpacer /> *@
+        @* <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" /> *@
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2" Color="Color.Default">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Class="mt-1">Application</MudText>
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer Class="mt-4" MaxWidth="MaxWidth.ExtraLarge">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+@code {
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+    
+    MudTheme CustomTheme = new MudTheme()
+    {
+        Palette = new PaletteLight()
+        {
+            Primary = Colors.Blue.Darken4,
+            Secondary = Colors.Blue.Darken2,
+            AppbarBackground = Colors.Blue.Darken4,
+            Info = Colors.Blue.Darken4,
+            Error = Colors.Red.Darken4,
+            Success = Colors.Green.Darken4
+        },
+        
+    };
+}
+
+@* *@
+@* <div class="page"> *@
+@*     <div class="sidebar"> *@
+@*         <NavMenu/> *@
+@*     </div> *@
+@* *@
+@*     <main> *@
+@*         <div class="top-row px-4"> *@
+@*             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a> *@
+@*         </div> *@
+@*          *@
+@*         <div class="content px-4"> *@
+@*             <MudThemeProvider /> *@
+@*             @Body *@
+@*         </div> *@
+@*          *@
+@*     </main> *@
+@* </div> *@
+@* *@

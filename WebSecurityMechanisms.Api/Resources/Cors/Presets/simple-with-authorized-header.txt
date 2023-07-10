@@ -1,0 +1,7 @@
+const req = new XMLHttpRequest();
+req.addEventListener("load", function () {
+    console.log('OK');
+});
+req.open("GET", "<APIURL>");
+req.setRequestHeader("Accept-Language", "en-US");
+req.send();

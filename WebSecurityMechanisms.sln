@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CORS.Backend", "Components\CORS\CORS.Backend\CORS.Backend.csproj", "{50A231DD-D9CE-49D2-A76C-129564C51316}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSecurityMechanisms.HeadlessFrontend", "WebSecurityMechanisms.HeadlessFrontend\WebSecurityMechanisms.HeadlessFrontend.csproj", "{12C608A5-C140-4CC5-95E9-986E6D9932AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSecurityMechanisms.Api", "WebSecurityMechanisms.Api\WebSecurityMechanisms.Api.csproj", "{C702623B-3351-4A69-85CC-B0E8A284E17A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSecurityMechanisms.App", "WebSecurityMechanisms.App\WebSecurityMechanisms.App.csproj", "{01FC4664-C5DF-4559-B187-3659A966B6D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSecurityMechanisms.Models", "WebSecurityMechanisms.Models\WebSecurityMechanisms.Models.csproj", "{488869C0-5A9F-482E-A750-D652DB304273}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSecurityMechanisms.Proxy", "WebSecurityMechanisms.Proxy\WebSecurityMechanisms.Proxy.csproj", "{B149B2BD-2F22-48C6-9C25-652FF2C2A57C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50A231DD-D9CE-49D2-A76C-129564C51316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A231DD-D9CE-49D2-A76C-129564C51316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A231DD-D9CE-49D2-A76C-129564C51316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A231DD-D9CE-49D2-A76C-129564C51316}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12C608A5-C140-4CC5-95E9-986E6D9932AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12C608A5-C140-4CC5-95E9-986E6D9932AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12C608A5-C140-4CC5-95E9-986E6D9932AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12C608A5-C140-4CC5-95E9-986E6D9932AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C702623B-3351-4A69-85CC-B0E8A284E17A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C702623B-3351-4A69-85CC-B0E8A284E17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C702623B-3351-4A69-85CC-B0E8A284E17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C702623B-3351-4A69-85CC-B0E8A284E17A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01FC4664-C5DF-4559-B187-3659A966B6D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01FC4664-C5DF-4559-B187-3659A966B6D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01FC4664-C5DF-4559-B187-3659A966B6D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01FC4664-C5DF-4559-B187-3659A966B6D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{488869C0-5A9F-482E-A750-D652DB304273}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{488869C0-5A9F-482E-A750-D652DB304273}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{488869C0-5A9F-482E-A750-D652DB304273}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{488869C0-5A9F-482E-A750-D652DB304273}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B149B2BD-2F22-48C6-9C25-652FF2C2A57C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B149B2BD-2F22-48C6-9C25-652FF2C2A57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B149B2BD-2F22-48C6-9C25-652FF2C2A57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B149B2BD-2F22-48C6-9C25-652FF2C2A57C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

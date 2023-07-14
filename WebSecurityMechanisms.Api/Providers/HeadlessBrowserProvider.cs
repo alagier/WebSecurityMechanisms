@@ -16,6 +16,8 @@ public class HeadlessBrowserProvider : IHeadlessBrowserProvider
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _env;
     private readonly string _headlessFrontUrl;
+    private readonly string _headlessBrowserUrl;
+    private readonly string _proxyHost;
 
     public List<ConsoleMessage>? ConsoleMessages { get; private set; }
 
@@ -23,6 +25,8 @@ public class HeadlessBrowserProvider : IHeadlessBrowserProvider
     {
         _configuration = configuration;
         _headlessFrontUrl = configuration["HeadlessFrontUrl"];
+        _headlessBrowserUrl = configuration["HeadlessBrowserUrl"];
+        _proxyHost = configuration["ProxyHost"];
         _env = env;
     }
 
@@ -39,9 +43,11 @@ public class HeadlessBrowserProvider : IHeadlessBrowserProvider
                     ExecutablePath = "/usr/bin/chromium-browser",
                     Args = new[]
                     {
-                        "--proxy-server=localhost:1234"
+                        $"--proxy-server={_proxyHost}"
                     }
                 });
+            
+            Console.WriteLine($"Headless browser started locally and connected to proxy {_proxyHost}");
         }
         else
         {
@@ -49,11 +55,12 @@ public class HeadlessBrowserProvider : IHeadlessBrowserProvider
             {
                 _browser = (PuppeteerSharp.Browser)await PuppeteerSharp.Puppeteer.ConnectAsync(new ConnectOptions()
                 {
-                    BrowserURL = "http://192.168.99.2:9222"
+                    BrowserURL = _headlessBrowserUrl
                 });
+                
+                Console.WriteLine($"API connected to remote headless browser {_headlessBrowserUrl}");
             }
         }
-
 
         _page = (PuppeteerSharp.Page)await _browser.NewPageAsync();
 

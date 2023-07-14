@@ -63,9 +63,9 @@ public class DiagramProvider : IDiagramProvider
                     {
                         sb.Append($"{h.Key}: {h.Value}");
                         
-                        if (j == corsHeadersCountInRequest)
+                        if (j == corsHeadersCountInResponse)
                             sb.Append("\n");
-                        else if (j < corsHeadersCountInRequest)
+                        else if (j < corsHeadersCountInResponse)
                             sb.Append("<br />");
                         j++;
                     }

@@ -40,7 +40,8 @@ public class CorsService : ICorsService
             new() { Key = "simple-post", Name = "POST"},
             new() { Key = "simple-with-authorized-header", Name = "With authorized header"},
             new() { Key = "preflight-put", Name = "PUT"},
-            new() { Key = "preflight-with-custom-authorized-header", Name = "With custom header"}
+            new() { Key = "preflight-with-custom-authorized-header", Name = "With custom header"},
+            new() { Key = "simple-with-credentials", Name = "With credentials"}
         };
 
         _endpoints = new List<Endpoint>()

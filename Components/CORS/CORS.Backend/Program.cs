@@ -15,14 +15,15 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(headlessFrontUrl)
-                .WithMethods(new string[] {"GET", "PUT"})
-                .WithHeaders("x-custom-header");
+                .WithMethods(new string[] { "GET", "PUT" })
+                .WithHeaders("x-custom-header")
+                .AllowCredentials();
         });
     options.AddPolicy(name: allOrigins,
         policy =>
         {
             policy.WithOrigins("*")
-                .WithMethods(new string[] {"GET", "PUT"})
+                .WithMethods(new string[] { "GET", "PUT" })
                 .WithHeaders("x-custom-header");
         });
     options.AddPolicy(name: closedOrigins,

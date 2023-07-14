@@ -1,4 +1,5 @@
-﻿@page "/cors"
+﻿@page "/"
+@page "/cors"
 @using WebSecurityMechanisms.Models
 @using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
@@ -87,6 +88,10 @@
             <tr>
                 <td>Allowed headers</td>
                 <td>X-Custom-Header</td>
+            </tr>
+            <tr>
+                <td>Allow credentials</td>
+                <td>Yes</td>
             </tr>
             <tr>
                 <td class="title" colspan="2">

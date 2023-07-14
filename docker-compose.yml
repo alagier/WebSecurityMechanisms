@@ -9,6 +9,8 @@ services:
     environment:
       - HeadlessFrontUrl=http://front.dev
       - CorsApiUrl=http://cors-api.dev
+      - ProxyHost=localhost:1234
+      - HeadlessBrowserUrl=http://192.168.99.2:9222
     ports:
       - 8080:80
     volumes:
@@ -21,10 +23,6 @@ services:
       context: .
       dockerfile: WebSecurityMechanisms.App/Dockerfile
       target: final
-    environment:
-      - ApiUrl=http://localhost:8080
-      - CorsFrontUrl=http://front.dev
-      - CorsApiUrl=http://cors-api.dev
     ports:
       - 80:80
     networks:
@@ -56,6 +54,8 @@ services:
       context: .
       dockerfile: WebSecurityMechanisms.Proxy/Dockerfile
       target: final
+    environment:
+      - ProxyPort=1234
     hostname: proxy.dev
     volumes:
       - ./WebSecurityMechanisms.Data/WebSecurityMechanisms.Data.sqlite:/data/WebSecurityMechanisms.Data.sqlite

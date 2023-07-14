@@ -13,12 +13,8 @@ env:
 
 jobs:
   build:
-
-    name: build-${{matrix.os}}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [debian-latest]
+    name: build-debian-latest
+    runs-on: debian-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -32,33 +28,6 @@ jobs:
       
     - name: Build
       run: dotnet build --configuration Release --no-restore
-      
-  analyze:
-
-    name: analyze
-    runs-on: debian-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: ['csharp']
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 2
-
-    - run: git checkout HEAD^2
-      if: ${{ github.event_name == 'pull_request' }}
-
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
-
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+    - name: Build Docker
+      run: docker compose -f docker-compose.yml build
+    

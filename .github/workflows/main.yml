@@ -28,11 +28,7 @@ jobs:
       
     - name: Build
       run: dotnet build --configuration Release --no-restore
-  build-docker:
-    name: build-docker
-    runs-on: ubuntu-latest
-    
-    steps:
+
     - name: Build Docker
       run: docker compose -f docker-compose.yml build
     

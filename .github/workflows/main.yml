@@ -14,7 +14,7 @@ env:
 jobs:
   build:
     name: build-debian
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -30,7 +30,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
   build-docker:
     name: build-docker
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     
     steps:
     - name: Build Docker

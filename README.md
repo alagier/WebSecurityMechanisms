@@ -15,3 +15,7 @@ $ docker-compose up --build --force-recreate -d --no-deps
 ### Access
 
 Go to http://localhost
+
+## Features
+
+For the moment the only available security mechanism is CORS (Cross Origin Resource Sharing)

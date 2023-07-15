@@ -7,7 +7,6 @@ services:
       target: final
     command: dotnet run
     environment:
-      - HeadlessFrontUrl=http://front.dev
       - CorsApiUrl=http://cors-api.dev
       - ProxyHost=localhost:1234
       - HeadlessBrowserUrl=http://192.168.99.2:9222

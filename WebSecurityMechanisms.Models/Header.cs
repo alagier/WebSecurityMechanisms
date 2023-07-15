@@ -1,13 +1,12 @@
-using System.Net;
 using System.Net.Http.Headers;
 
 namespace WebSecurityMechanisms.Models;
 
 public class Header
 {
-    public string Key { get; set; }
+    public string? Key { get; set; }
 
-    public string Value { get; set; }
+    public string? Value { get; set; }
 
     public bool IsHighlighted { get; set; }
 

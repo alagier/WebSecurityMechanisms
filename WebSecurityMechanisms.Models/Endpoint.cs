@@ -2,9 +2,14 @@ namespace WebSecurityMechanisms.Models;
 
 public class Endpoint
 {
-    public string Path { get; set; }
+    public Endpoint(string path)
+    {
+        Path = path;
+    }
     
-    public override bool Equals(object o)
+    public string Path { get; }
+    
+    public override bool Equals(object? o)
     {
         var other = o as Endpoint;
         return other?.Path == Path;

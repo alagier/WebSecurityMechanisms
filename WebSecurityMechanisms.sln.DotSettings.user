@@ -1,2 +1,15 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002Fhome_002Faymeric_002FData_002Fsources_002Fwork_002FOpenSource_002FPuppeteer_002Flib_002FPuppeteerSharp_002Fbin_002FDebug_002Fnetstandard2_002E0_002FPuppeteerSharp_002Edll/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002Fhome_002Faymeric_002FData_002Fsources_002Fwork_002FOpenSource_002FPuppeteer_002Flib_002FPuppeteerSharp_002Fbin_002FDebug_002Fnetstandard2_002E0_002FPuppeteerSharp_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/home/aymeric/.cache/JetBrains/Rider2023.1/resharper-host/temp/Rider/vAny/CoverageData/_WebSecurityMechanisms.823776091/Snapshot/snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=050022d6_002De1ac_002D4802_002D8190_002D89ba8b67bd0e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetPresetAsyncTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=179f7c6d_002Da76c_002D4469_002D9a22_002Dca068b353232/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="UnitTest1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::BB7095EE-826F-4C78-ABBE-3485B119F0A0::net7.0::WebSecurityMechanisms.Api.Tests.CorsServiceTest&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c934f045_002Df66a_002D46d5_002D8060_002Dd4b98f48c56b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestConfigurationAsync_With_ExpectedParameters" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=allorigins/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

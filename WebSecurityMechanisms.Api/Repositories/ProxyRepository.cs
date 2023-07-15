@@ -1,4 +1,3 @@
-using System.Data;
 using Microsoft.Data.Sqlite;
 using WebSecurityMechanisms.Api.Repositories.Interfaces;
 using WebSecurityMechanisms.Models;
@@ -23,7 +22,7 @@ public class ProxyRepository : IProxyRepository
         {
             connection.Open();
 
-            var command = (SqliteCommand)connection.CreateCommand();
+            var command = connection.CreateCommand();
             command.CommandText =
                 @"SELECT * FROM proxy_history WHERE correlation_id = @correlationId";
 

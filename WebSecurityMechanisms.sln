@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSecurityMechanisms.Model
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSecurityMechanisms.Proxy", "WebSecurityMechanisms.Proxy\WebSecurityMechanisms.Proxy.csproj", "{B149B2BD-2F22-48C6-9C25-652FF2C2A57C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSecurityMechanisms.Api.Tests", "WebSecurityMechanisms.Api.Tests\WebSecurityMechanisms.Api.Tests.csproj", "{BB7095EE-826F-4C78-ABBE-3485B119F0A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{B149B2BD-2F22-48C6-9C25-652FF2C2A57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B149B2BD-2F22-48C6-9C25-652FF2C2A57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B149B2BD-2F22-48C6-9C25-652FF2C2A57C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB7095EE-826F-4C78-ABBE-3485B119F0A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB7095EE-826F-4C78-ABBE-3485B119F0A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB7095EE-826F-4C78-ABBE-3485B119F0A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB7095EE-826F-4C78-ABBE-3485B119F0A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

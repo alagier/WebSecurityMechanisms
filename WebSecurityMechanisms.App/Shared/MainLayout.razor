@@ -1,12 +1,12 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider Theme="@CustomTheme"/>
+<MudThemeProvider Theme="@_customTheme"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((_) => DrawerToggle())"/>
         <MudContainer MaxWidth="MaxWidth.ExtraLarge">
             <MudText Typo="Typo.h5" Class="mt-1" Align="Align.Center">Web Security Mechanisms</MudText>
         </MudContainer>
@@ -32,7 +32,7 @@
         _drawerOpen = !_drawerOpen;
     }
 
-    MudTheme CustomTheme = new MudTheme()
+    readonly MudTheme _customTheme = new MudTheme()
     {
         Palette = new PaletteLight()
         {

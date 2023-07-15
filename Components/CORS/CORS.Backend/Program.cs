@@ -1,13 +1,10 @@
-using System.Text;
-using System.Linq;
-
 var builder = WebApplication.CreateBuilder(args);
 
-var restrictedOrigins = "_restrictedOrigins";
-var allOrigins = "_allOrigins";
-var closedOrigins = "_closedOrigins";
+const string restrictedOrigins = "_restrictedOrigins";
+const string allOrigins = "_allOrigins";
+const string closedOrigins = "_closedOrigins";
 
-var headlessFrontUrl = builder.Configuration["HeadlessFrontUrl"];
+var headlessFrontUrl = builder.Configuration["HeadlessFrontUrl"] ?? throw new Exception("headlessFrontUrl can't be null");
 
 builder.Services.AddCors(options =>
 {
@@ -15,7 +12,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(headlessFrontUrl)
-                .WithMethods(new string[] { "GET", "PUT" })
+                .WithMethods("GET", "PUT")
                 .WithHeaders("x-custom-header")
                 .AllowCredentials();
         });
@@ -23,7 +20,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins("*")
-                .WithMethods(new string[] { "GET", "PUT" })
+                .WithMethods("GET", "PUT")
                 .WithHeaders("x-custom-header");
         });
     options.AddPolicy(name: closedOrigins,

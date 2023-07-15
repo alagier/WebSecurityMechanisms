@@ -4,22 +4,19 @@ namespace WebSecurityMechanisms.Models;
 
 public class Response
 {
-    public List<Header> Headers { get; set; }
+    public List<Header>? Headers { get; set; }
 
     public HttpStatusCode Status { get; set; }
 
-    public string Body { get; set; }
+    public string? Body { get; set; }
 
     public bool IsInError
     {
         get
         {
-            int intStatus = (int)Status;
+            var intStatus = (int)Status;
 
-            if (intStatus >= 400 && intStatus <= 600)
-                return true;
-
-            return false;
+            return intStatus is >= 400 and <= 600;
         }
     }
     
@@ -28,10 +25,12 @@ public class Response
         if (response == null)
             throw new ArgumentNullException(nameof(response));
 
-        Response result = new Response();
-        result.Headers = Header.Create(response.Headers);
-        result.Body = await response.Content.ReadAsStringAsync();
-        result.Status = response.StatusCode;
+        var result = new Response
+        {
+            Headers = Header.Create(response.Headers),
+            Body = await response.Content.ReadAsStringAsync(),
+            Status = response.StatusCode
+        };
 
         return result;
     }

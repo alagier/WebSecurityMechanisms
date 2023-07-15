@@ -30,16 +30,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Resources\Cors\Presets\preflight-with-custom-authorized-header.txt">
+      <None Update="Resources\Cors\Presets\with-custom-authorized-header.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Resources\Cors\Presets\simple-get.txt">
+      <None Update="Resources\Cors\Presets\get.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Resources\Cors\Presets\simple-post.txt">
+      <None Update="Resources\Cors\Presets\post.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Resources\Cors\Presets\simple-with-authorized-header.txt">
+      <None Update="Resources\Cors\Presets\with-authorized-header.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

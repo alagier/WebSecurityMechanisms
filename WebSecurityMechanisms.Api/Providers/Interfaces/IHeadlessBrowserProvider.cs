@@ -1,5 +1,3 @@
-using PuppeteerSharp;
-using WebSecurityMechanisms.Models;
 using ConsoleMessage = WebSecurityMechanisms.Models.ConsoleMessage;
 
 namespace WebSecurityMechanisms.Api.Providers.Interfaces;
@@ -15,6 +13,4 @@ public interface IHeadlessBrowserProvider
     Task EvaluateExpressionAsync(string payload);
     
     Task WaitForTimeoutAsync(int milliseconds);
-
-    Task CloseBrowserAsync();
 }

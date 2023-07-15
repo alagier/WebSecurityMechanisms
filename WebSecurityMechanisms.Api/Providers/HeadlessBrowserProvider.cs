@@ -1,21 +1,15 @@
-using System.Net;
 using PuppeteerSharp;
 using WebSecurityMechanisms.Api.Providers.Interfaces;
-using WebSecurityMechanisms.Models;
 using ConsoleMessage = WebSecurityMechanisms.Models.ConsoleMessage;
-using Request = WebSecurityMechanisms.Models.Request;
-using Response = WebSecurityMechanisms.Models.Response;
 
 namespace WebSecurityMechanisms.Api.Providers;
 
 public class HeadlessBrowserProvider : IHeadlessBrowserProvider
 {
-    private PuppeteerSharp.Browser? _browser = null;
-    private PuppeteerSharp.Page? _page = null;
+    private Browser? _browser;
+    private Page? _page;
 
-    private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _env;
-    private readonly string _headlessFrontUrl;
     private readonly string _headlessBrowserUrl;
     private readonly string _proxyHost;
 
@@ -23,10 +17,9 @@ public class HeadlessBrowserProvider : IHeadlessBrowserProvider
 
     public HeadlessBrowserProvider(IConfiguration configuration, IWebHostEnvironment env)
     {
-        _configuration = configuration;
-        _headlessFrontUrl = configuration["HeadlessFrontUrl"];
-        _headlessBrowserUrl = configuration["HeadlessBrowserUrl"];
-        _proxyHost = configuration["ProxyHost"];
+        var configuration1 = configuration;
+        _headlessBrowserUrl = configuration1["HeadlessBrowserUrl"] ?? throw new Exception("_headlessBrowserUrl can't be null");
+        _proxyHost = configuration1["ProxyHost"] ?? throw new Exception("_proxyHost can't be null");
         _env = env;
     }
 
@@ -36,8 +29,8 @@ public class HeadlessBrowserProvider : IHeadlessBrowserProvider
 
         if (_env.IsDevelopment())
         {
-            _browser = (PuppeteerSharp.Browser)await PuppeteerSharp.Puppeteer.LaunchAsync(
-                new PuppeteerSharp.LaunchOptions
+            _browser = (Browser)await Puppeteer.LaunchAsync(
+                new LaunchOptions
                 {
                     Headless = true,
                     ExecutablePath = "/usr/bin/chromium-browser",
@@ -53,7 +46,7 @@ public class HeadlessBrowserProvider : IHeadlessBrowserProvider
         {
             if (_browser == null || !_browser.IsConnected)
             {
-                _browser = (PuppeteerSharp.Browser)await PuppeteerSharp.Puppeteer.ConnectAsync(new ConnectOptions()
+                _browser = (Browser)await Puppeteer.ConnectAsync(new ConnectOptions()
                 {
                     BrowserURL = _headlessBrowserUrl
                 });
@@ -62,7 +55,7 @@ public class HeadlessBrowserProvider : IHeadlessBrowserProvider
             }
         }
 
-        _page = (PuppeteerSharp.Page)await _browser.NewPageAsync();
+        _page = (Page)await _browser.NewPageAsync();
 
         await _page.SetUserAgentAsync(correlationId);
 
@@ -93,19 +86,7 @@ public class HeadlessBrowserProvider : IHeadlessBrowserProvider
         await _page.WaitForTimeoutAsync(milliseconds);
     }
 
-    public async Task CloseBrowserAsync()
-    {
-        if (_page != null && !_page.IsClosed)
-        {
-            _page.Console -= ConsoleEventHandler;
-            await _page.CloseAsync();
-        }
-
-        if (_browser != null && !_browser.IsClosed)
-            await _browser.CloseAsync();
-    }
-
-    private void ConsoleEventHandler(object? sender, PuppeteerSharp.ConsoleEventArgs e)
+    private void ConsoleEventHandler(object? sender, ConsoleEventArgs e)
     {
         if (ConsoleMessages != null)
             ConsoleMessages.Add(new ConsoleMessage()

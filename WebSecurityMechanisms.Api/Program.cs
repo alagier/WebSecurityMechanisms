@@ -1,6 +1,4 @@
 
-using System.Data;
-using Microsoft.Data.Sqlite;
 using WebSecurityMechanisms.Api.Providers;
 using WebSecurityMechanisms.Api.Providers.Interfaces;
 using WebSecurityMechanisms.Api.Repositories;
@@ -38,6 +36,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseExceptionHandler("/error-development");
+}
+else
+{
+    app.UseExceptionHandler("/error");
 }
 
 app.UseCors();

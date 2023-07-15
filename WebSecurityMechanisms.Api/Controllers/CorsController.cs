@@ -19,12 +19,7 @@ public class CorsController : ControllerBase
     [HttpPost]
     public async Task<BrowserNavigationData> TestConfigurationAsync([FromBody] string payload)
     {
-        if (payload == null)
-            throw new ArgumentNullException(nameof(payload));
-
-        BrowserNavigationData ret = await _corsService.TestConfigurationAsync(payload);
-
-        return ret;
+        return await _corsService.TestConfigurationAsync(payload);
     }
 
     public List<Preset> ListPresets()
@@ -39,12 +34,6 @@ public class CorsController : ControllerBase
     
     public async Task<string> GetPresetAsync(string preset, string endpoint)
     {
-        if (preset == null)
-            throw new ArgumentNullException(nameof(preset));
-        
-        if (endpoint == null)
-            throw new ArgumentNullException(nameof(endpoint));
-        
         return await _corsService.GetPresetAsync(preset, endpoint);
     }
 }

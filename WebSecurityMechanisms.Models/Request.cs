@@ -2,15 +2,13 @@ namespace WebSecurityMechanisms.Models;
 
 public class Request
 {
-    public string RequestId { get; set; }
-    
-    public string Method { get; set; }
+    public string? Method { get; set; }
 
-    public object PostData { get; set; }
+    public object? PostData { get; set; }
 
-    public List<Header> Headers { get; set; }
+    public List<Header>? Headers { get; set; }
 
-    public string Url { get; set; }
+    public string? Url { get; set; }
     
     public static async Task<Request> CreateAsync(HttpRequestMessage request)
     {
@@ -29,7 +27,7 @@ public class Request
         }
         
         result.Method = request.Method.Method;
-        result.Url = request.RequestUri.OriginalString;
+        result.Url = request.RequestUri?.OriginalString;
 
         return result;
     }

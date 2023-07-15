@@ -1,8 +1,4 @@
-﻿// Create a new HttpListener to listen for requests on the specified URL
-
-using System.IO.Compression;
-using System.Net;
-using System.Net.Mime;
+﻿using System.Net;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Data.Sqlite;
@@ -10,10 +6,10 @@ using Microsoft.Extensions.Configuration;
 using WebSecurityMechanisms.Models;
 
 var environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
-var configuration =  new ConfigurationBuilder()
-    .AddJsonFile($"appsettings.json", true, true)
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", true, true)
     .AddJsonFile($"appsettings.{environment}.json", true, true);
-            
+
 var config = configuration.Build();
 var connectionString = config.GetConnectionString("DataConnection");
 var proxyPort = config["ProxyPort"];
@@ -57,6 +53,9 @@ while (true)
 
         HttpResponseMessage destinationResponse = httpClient.Send(destinationRequest);
 
+        if (destinationResponse == null)
+            throw new Exception("destinationResponse can't be null");
+
         responseToSend.StatusCode = (int)destinationResponse.StatusCode;
 
         foreach (var header in destinationResponse.Headers)
@@ -64,12 +63,9 @@ while (true)
             responseToSend.Headers.Add(header.Key, header.Value.First());
         }
 
-        if (destinationResponse.Content != null)
+        foreach (var header in destinationResponse.Content.Headers)
         {
-            foreach (var header in destinationResponse.Content.Headers)
-            {
-                responseToSend.Headers.Add(header.Key, header.Value.First());
-            }
+            responseToSend.Headers.Add(header.Key, header.Value.First());
         }
 
         sb.Append(" - " + destinationResponse.StatusCode);
@@ -107,5 +103,3 @@ while (true)
         Console.WriteLine(e.Message);
     }
 }
-
-listener.Close();

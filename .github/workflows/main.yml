@@ -32,13 +32,10 @@ jobs:
     - name: Test
       run: dotnet test
       
-    - name: Snyk
-      uses: snyk/actions@0.4.0
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/dotnet@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        command: test
-        json: snyk.json
         
     - name: GitGuardian scan
       uses: GitGuardian/ggshield-action@v1.17.2

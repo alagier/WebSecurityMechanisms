@@ -2,7 +2,6 @@
 
 [![Build and test](https://github.com/alagier/WebSecurityMechanisms/actions/workflows/main.yml/badge.svg)](https://github.com/alagier/WebSecurityMechanisms/actions/workflows/main.yml)
 [![CodeQL](https://github.com/alagier/WebSecurityMechanisms/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/alagier/WebSecurityMechanisms/actions/workflows/github-code-scanning/codeql)
-[![Known Vulnerabilities](https://snyk.io/test/github/alagier/WebSecurityMechanisms/badge.svg)](https://snyk.io/test/github/alagier/WebSecurityMechanisms)
 
 ## Usage
 

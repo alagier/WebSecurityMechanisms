@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices.JavaScript;
+using PuppeteerSharp;
 using WebSecurityMechanisms.Models;
 using WebSecurityMechanisms.Api.Services.Interfaces;
 using WebSecurityMechanisms.Api.Providers.Interfaces;
@@ -27,16 +29,18 @@ public class CorsService : ICorsService
         _diagramProvider = diagramProvider;
         _corsRepository = corsRepository;
         _proxyRepository = proxyRepository;
-        _headlessFrontUrl = _configuration["HeadlessFrontUrl"] ?? throw new Exception("_headlessFrontUrl can't be null");
-        _corsHeaders = _configuration.GetSection("Cors:Headers").Get<List<string>>() ?? throw new Exception("_corsHeaders can't be null");
+        _headlessFrontUrl =
+            _configuration["HeadlessFrontUrl"] ?? throw new Exception("_headlessFrontUrl can't be null");
+        _corsHeaders = _configuration.GetSection("Cors:Headers").Get<List<string>>() ??
+                       throw new Exception("_corsHeaders can't be null");
 
         _presets = new List<Preset>()
         {
-            new("get") { Name = "GET"},
-            new("post") { Name = "POST"},
-            new("with-authorized-header") { Name = "With authorized header"},
-            new("with-custom-authorized-header") { Name = "With custom header"},
-            new("with-credentials") { Name = "With credentials"}
+            new("get") { Name = "GET" },
+            new("post") { Name = "POST" },
+            new("with-authorized-header") { Name = "With authorized header" },
+            new("with-custom-authorized-header") { Name = "With custom header" },
+            new("with-credentials") { Name = "With credentials" }
         };
 
         _endpoints = new List<Endpoint>()
@@ -58,7 +62,18 @@ public class CorsService : ICorsService
 
         await _headlessBrowserProvider.GoToAsync(_headlessFrontUrl);
 
-        await _headlessBrowserProvider.EvaluateExpressionAsync(payload);
+        try
+        {
+            await _headlessBrowserProvider.EvaluateExpressionAsync(payload);
+        }
+        catch (EvaluationFailedException e)
+        {
+            return new CorsBrowserNavigationData()
+            {
+                IsInError = true,
+                Error = e.Message
+            };
+        }
 
         await _headlessBrowserProvider.WaitForTimeoutAsync(3000);
 
@@ -66,7 +81,7 @@ public class CorsService : ICorsService
 
         if (proxyData == null)
             throw new NullReferenceException(nameof(proxyData));
-        
+
         return ProcessAndBuildData(proxyData, _headlessBrowserProvider.ConsoleMessages);
     }
 
@@ -74,12 +89,12 @@ public class CorsService : ICorsService
     {
         if (preset == null)
             throw new ArgumentNullException(nameof(preset));
-        
+
         if (endpoint == null)
             throw new ArgumentNullException(nameof(endpoint));
-        
+
         var code = await _corsRepository.GetPresetAsync(preset);
-        
+
         return code.Replace("<APIURL>", $"{_configuration["CorsApiUrl"]}{endpoint}");
     }
 
@@ -96,10 +111,11 @@ public class CorsService : ICorsService
     private CorsBrowserNavigationData ProcessAndBuildData(List<HttpExchange> httpExchanges,
         List<ConsoleMessage>? consoleMessages)
     {
-        bool isWithPreflight = false;
         bool isInError = false;
+        string? error = null;
 
-        httpExchanges = httpExchanges.Where(e => e.Request?.Url != null && !e.Request.Url.StartsWith(_headlessFrontUrl)).ToList();
+        httpExchanges = httpExchanges.Where(e => e.Request?.Url != null && !e.Request.Url.StartsWith(_headlessFrontUrl))
+            .ToList();
 
         httpExchanges.ForEach(e =>
         {
@@ -118,20 +134,108 @@ public class CorsService : ICorsService
 
         if (httpExchanges.Count == 0)
         {
-            isInError = true;
-        }
-        else
-        {
-            isWithPreflight = httpExchanges.First().Request?.Method == HttpMethod.Options.Method;    
+            return new CorsBrowserNavigationData()
+            {
+                IsInError = true,
+                Error = "An error occurred, please try again or report an issue !"
+            };
         }
 
         return new CorsBrowserNavigationData()
         {
             ConsoleMessages = consoleMessages,
             HttpExchanges = httpExchanges,
-            IsWithPreflight = isWithPreflight,
+            Summary = GetCorsSummary(httpExchanges),
             IsInError = isInError,
+            Error = error,
             SequenceDiagram = _diagramProvider.BuildSequenceDiagramFromHttpExchanges(httpExchanges, "Browser", "API")
         };
+    }
+
+    private CorsSummary GetCorsSummary(List<HttpExchange> httpExchanges)
+    {
+        CorsSummary result = new CorsSummary();
+
+        result.IsPreflight = httpExchanges.Count >= 1 &&
+                             httpExchanges.First().Request?.Method == HttpMethod.Options.Method;
+
+        var request = httpExchanges.First().Request;
+        var response = httpExchanges.First().Response;
+
+        if (request != null && request.Headers != null
+                            && response != null && response.Headers != null)
+        {
+            result.Origin.Requested = request.Headers
+                .FirstOrDefault(h => string.Equals(h.Key, "Origin", StringComparison.OrdinalIgnoreCase))
+                ?.Value;
+
+            result.Method.Requested = request.Headers
+                .FirstOrDefault(h =>
+                    string.Equals(h.Key, "Access-Control-Request-Method", StringComparison.OrdinalIgnoreCase))
+                ?.Value;
+
+            result.Headers.Requested = request.Headers
+                .FirstOrDefault(h =>
+                    string.Equals(h.Key, "Access-Control-Request-Headers", StringComparison.OrdinalIgnoreCase))
+                ?.Value;
+
+            result.Origin.Received = response.Headers
+                .FirstOrDefault(h =>
+                    string.Equals(h.Key, "Access-Control-Allow-Origin", StringComparison.OrdinalIgnoreCase))
+                ?.Value;
+
+            result.Method.Received = response.Headers
+                .FirstOrDefault(h =>
+                    string.Equals(h.Key, "Access-Control-Allow-Methods", StringComparison.OrdinalIgnoreCase))
+                ?.Value;
+
+            result.Headers.Received = response.Headers
+                .FirstOrDefault(h =>
+                    string.Equals(h.Key, "Access-Control-Allow-Headers", StringComparison.OrdinalIgnoreCase))
+                ?.Value;
+
+            if (result.Origin.Requested != null && result.Origin.Received != null)
+                result.Origin.isValid = string.Equals(result.Origin.Received, result.Origin.Requested,
+                    StringComparison.OrdinalIgnoreCase) || result.Origin.Received == "*";
+            else
+                result.Origin.isValid = false;
+
+            if (result.Method.Requested != null && result.Method.Received != null)
+            {
+                var allowedMethods = result.Method.Received.Split(',');
+
+                result.Method.isValid = allowedMethods.Any(m =>
+                    string.Equals(m, result.Method.Requested, StringComparison.OrdinalIgnoreCase));
+            }
+            else if (string.Equals(request.Method, "GET", StringComparison.OrdinalIgnoreCase)
+                     || string.Equals(request.Method, "POST", StringComparison.OrdinalIgnoreCase)
+                     || string.Equals(request.Method, "HEAD", StringComparison.OrdinalIgnoreCase))
+            {
+                result.Method.isValid = true;
+            }
+
+            if (result.Headers.Requested != null && result.Headers.Received != null)
+            {
+                var requestedHeaders = result.Headers.Requested.Split(',', StringSplitOptions.TrimEntries);
+                var allowedHeaders = result.Headers.Received.Split(',', StringSplitOptions.TrimEntries);
+
+                foreach (var requestedHeader in requestedHeaders)
+                {
+                    if (allowedHeaders.Any(h => string.Equals(h, requestedHeader, StringComparison.OrdinalIgnoreCase)))
+                        result.Headers.isValid = true;
+                    else
+                    {
+                        result.Headers.isValid = false;
+                        break;
+                    }
+                }
+            }
+            else if (result.Headers.Requested != null && result.Headers.Received == null)
+                result.Headers.isValid = false;
+            else
+                result.Headers.isValid = true;
+        }
+
+        return result;
     }
 }

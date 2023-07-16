@@ -9,6 +9,9 @@
     &lt;TestId&gt;NUnit3x::BB7095EE-826F-4C78-ABBE-3485B119F0A0::net7.0::WebSecurityMechanisms.Api.Tests.CorsServiceTest&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=632f7f07_002D744e_002D4f50_002Db193_002D61b618e85fbd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c934f045_002Df66a_002D46d5_002D8060_002Dd4b98f48c56b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestConfigurationAsync_With_ExpectedParameters" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>

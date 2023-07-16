@@ -49,14 +49,14 @@ public partial class Cors : ComponentBase
 
         IsLoaderVisible = false;
         
-        if (_testResult != null)
+        if (_testResult != null && !_testResult.IsInError)
         {
             await Js.InvokeVoidAsync("renderDiagram", _testResult.SequenceDiagram, _renderTo);
             StateHasChanged();
         }
         else if (_testResult == null || _testResult.IsInError)
         {
-            SnackbarService.Add("An error occurred, please try again or report an issue !", Severity.Error);
+            SnackbarService.Add(_testResult?.Error ?? "An error occurred, please try again or report an issue !", Severity.Error);
         }
     }
 

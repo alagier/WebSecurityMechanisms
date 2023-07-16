@@ -8,5 +8,7 @@ public class BrowserNavigationData
 
     public bool IsInError { get; set; }
 
+    public string Error { get; set; }
+
     public string? SequenceDiagram { get; set; }
 }

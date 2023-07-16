@@ -66,7 +66,7 @@
             </tr>
             <tr>
                 <td>Allowed verbs</td>
-                <td>GET, POST, PUT, DELETE</td>
+                <td>HEAD, GET, PUT, POST, DELETE, OPTIONS, PATCH</td>
             </tr>
             <tr>
                 <td>Allowed headers</td>
@@ -83,7 +83,7 @@
             </tr>
             <tr>
                 <td>Allowed verbs</td>
-                <td>GET, POST, PUT, DELETE</td>
+                <td>HEAD, GET, PUT, POST, DELETE, OPTIONS, PATCH</td>
             </tr>
             <tr>
                 <td>Allowed headers</td>
@@ -122,7 +122,7 @@
 <MudTabs KeepPanelsAlive="true" Elevation="2" Rounded="true" Outlined="true" Class="mt-2" ApplyEffectsToContainer="true" PanelClass="pa-6">
     <MudTabPanel Text="Network">
         <MudText>
-            @if (_testResult is {IsWithPreflight: true })
+            @if (_testResult != null && _testResult.Summary.IsPreflight)
             {
                 var request = _testResult.HttpExchanges.First().Request;
 
@@ -190,7 +190,7 @@
             <MudGrid>
                 <MudItem xs="12" sm="6">
                     <h4>Request headers</h4>
-                    @if (_testResult == null || _testResult.HttpExchanges.Count == 0 || (_testResult.IsWithPreflight && _testResult.HttpExchanges.Count == 1))
+                    @if (_testResult == null || _testResult.HttpExchanges.Count == 0 || (_testResult.Summary.IsPreflight && _testResult.HttpExchanges.Count == 1))
                     {
                         <span>No data</span>
                     }
@@ -226,7 +226,7 @@
                 </MudItem>
                 <MudItem xs="12" sm="6">
                     <h4>Response headers</h4>
-                    @if (_testResult == null || _testResult.HttpExchanges.Count == 0 || (_testResult.IsWithPreflight && _testResult.HttpExchanges.Count == 1))
+                    @if (_testResult == null || _testResult.HttpExchanges.Count == 0 || (_testResult.Summary.IsPreflight && _testResult.HttpExchanges.Count == 1))
                     {
                         <span>No data</span>
                     }
@@ -305,8 +305,51 @@
     </MudTabPanel>
 </MudTabs>
 
-<h2>Diagram</h2>
-
-<div id="http-exchanges-sequence-diagram" @ref="_renderTo"><div style="text-align: left;">No data</div></div>
+<MudGrid>
+    <MudItem xs="6">
+        <h2>Diagram</h2>
+        <div id="http-exchanges-sequence-diagram" @ref="_renderTo">
+            <div style="text-align: left;">No data</div>
+        </div>
+    </MudItem>
+    <MudItem xs="6">
+        <h2>Summary</h2>
+        <MudSimpleTable Dense="true">
+            <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Requested</th>
+                <th>Received</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (_testResult == null || _testResult.Summary == null)
+            {
+                <tr>
+                    <td colspan="3" style="text-align: center;">No data</td>
+                </tr>
+            }
+            else
+            {
+                <tr class="@(_testResult.Summary.Origin.isValid ? "success" : "error")">
+                    <td>@_testResult.Summary.Origin.Name</td>
+                    <td>@_testResult.Summary.Origin.Requested</td>
+                    <td>@_testResult.Summary.Origin.Received</td>
+                </tr>
+                <tr class="@(_testResult.Summary.Method.isValid ? "success" : "error")">
+                    <td>@_testResult.Summary.Method.Name</td>
+                    <td>@_testResult.Summary.Method.Requested</td>
+                    <td>@_testResult.Summary.Method.Received</td>
+                </tr>
+                <tr class="@(_testResult.Summary.Headers.isValid ? "success" : "error")">
+                    <td>@_testResult.Summary.Headers.Name</td>
+                    <td>@_testResult.Summary.Headers.Requested</td>
+                    <td>@_testResult.Summary.Headers.Received</td>
+                </tr>
+            }
+            </tbody>
+        </MudSimpleTable>
+    </MudItem>
+</MudGrid>
 
 <Loader IsLoaderVisible="@IsLoaderVisible"></Loader>

@@ -34,9 +34,10 @@ jobs:
       
     - name: Snyk
       uses: snyk/actions@0.4.0
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         command: test
-        # Additional arguments to pass to Snyk
         json: snyk.json
         
     - name: GitGuardian scan

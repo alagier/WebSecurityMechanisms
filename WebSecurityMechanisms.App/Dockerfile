@@ -12,7 +12,7 @@ WORKDIR "/src/WebSecurityMechanisms.App"
 RUN dotnet build "WebSecurityMechanisms.App.csproj" -c Release -o /app/build
 RUN dotnet publish "WebSecurityMechanisms.App.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM nginx:alpine AS final
+FROM nginx:1.25.3-alpine3.18 AS final
 WORKDIR /user/share/nginx/html
 COPY --from=build /app/publish/wwwroot .
 COPY WebSecurityMechanisms.App/nginx.conf /etc/nginx/nginx.conf
